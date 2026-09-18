@@ -28,8 +28,8 @@
   --accent: #7A4A21;
   --accent-fg: #FFFFFF;
   --accent-soft: #EFE3D5;
-  --font-display: "Literata", Georgia, serif;
-  --font-body: "Manrope", system-ui, sans-serif;
+  --font-display: var(--f-literata), Georgia, serif;
+  --font-body: var(--f-manrope), system-ui, sans-serif;
   --radius: 2px;
   --radius-lg: 3px;
   --display-weight: 600;
@@ -44,21 +44,20 @@
   --surface-2: #262A2C;
   --fg: #E8EAE9;
   --fg-soft: #A3AAA8;
-  --fg-faint: #7C8483;
+  --fg-faint: #8E9694;
   --line: #2E3335;
   --line-strong: #414749;
-  --accent: #D2601A;
-  --accent-fg: #14161700;
+  --accent: #E8853C;
+  --accent-fg: #141617;
   --accent-soft: #2A2119;
-  --font-display: "Oswald", "Arial Narrow", sans-serif;
-  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-display: var(--f-oswald), "Arial Narrow", sans-serif;
+  --font-body: var(--f-plex), system-ui, sans-serif;
   --radius: 0px;
   --radius-lg: 0px;
   --display-weight: 500;
   --display-tracking: 0.01em;
   --label-tracking: 0.18em;
 }
-[data-theme="graphite"] { --accent-fg: #141617; }
 
 /* ——— linen: світлий мінімалізм, багато повітря ——— */
 [data-theme="linen"] {
@@ -73,8 +72,8 @@
   --accent: #4A5D3F;
   --accent-fg: #FFFFFF;
   --accent-soft: #E7EBE2;
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-body: "Commissioner", system-ui, sans-serif;
+  --font-display: var(--f-playfair), Georgia, serif;
+  --font-body: var(--f-commissioner), system-ui, sans-serif;
   --radius: 0px;
   --radius-lg: 0px;
   --display-weight: 600;
@@ -96,8 +95,8 @@
   --accent: #14449E;
   --accent-fg: #FFFFFF;
   --accent-soft: #E6ECF7;
-  --font-display: "Unbounded", system-ui, sans-serif;
-  --font-body: "Manrope", system-ui, sans-serif;
+  --font-display: var(--f-unbounded), system-ui, sans-serif;
+  --font-body: var(--f-manrope), system-ui, sans-serif;
   --radius: 10px;
   --radius-lg: 18px;
   --display-weight: 600;

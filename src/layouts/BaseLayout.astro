@@ -1,15 +1,17 @@
 ---
+import { Font } from "astro:assets";
 import "../styles/global.css";
 import { site } from "../lib/site";
 
-const FONTS: Record<string, string> = {
-  oak: "family=Literata:opsz,wght@7..72,400;7..72,600&family=Manrope:wght@400;600;700",
-  graphite: "family=Oswald:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600",
-  linen: "family=Playfair+Display:wght@500;600&family=Commissioner:wght@400;500;600",
-  ink: "family=Unbounded:wght@500;600&family=Manrope:wght@400;600;700",
+// Підключаємо лише два шрифти обраної теми, а не всі сім.
+const THEME_FONTS: Record<string, string[]> = {
+  oak: ["--f-literata", "--f-manrope"],
+  graphite: ["--f-oswald", "--f-plex"],
+  linen: ["--f-playfair", "--f-commissioner"],
+  ink: ["--f-unbounded", "--f-manrope"],
 };
 
-const fontHref = `https://fonts.googleapis.com/css2?${FONTS[site.theme] ?? FONTS.oak}&display=swap`;
+const fonts = THEME_FONTS[site.theme] ?? THEME_FONTS.oak;
 const canonical = `https://${site.seo.domain}/`;
 
 // Розмітка для Google: без неї бізнес не потрапляє в блок локальних результатів.
@@ -54,9 +56,7 @@ const jsonLd = {
     <meta property="og:image" content={site.seo.ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href={fontHref} />
+    {fonts.map((v) => <Font cssVariable={v} preload />)}
 
     <set:html value={`<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`} />
   </head>

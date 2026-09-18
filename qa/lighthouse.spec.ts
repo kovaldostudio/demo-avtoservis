@@ -28,7 +28,7 @@ test("Lighthouse: пороги якості", async () => {
   test.setTimeout(180_000);
 
   const page = await browser.newPage();
-  await page.goto("http://localhost:4321/");
+  await page.goto("http://localhost:4331/");
 
   await playAudit({
     page,
