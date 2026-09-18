@@ -1,0 +1,90 @@
+---
+/**
+ * Зображення або навмисна заглушка.
+ *
+ * Коли `usePlaceholders: true` у конфігу, замість фото малюється акуратна
+ * рамка з підписом «Тут буде ваше фото». Це режим для вітрини й для демо:
+ * показує структуру сторінки, не використовуючи чужих знімків.
+ */
+import { site } from "../lib/site";
+
+interface Props {
+  src: string;
+  alt: string;
+  /** Що саме тут має стояти — підказка клієнту в режимі заглушки. */
+  hint?: string;
+  ratio?: string;
+  loading?: "lazy" | "eager";
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  hint = "",
+  ratio = "4 / 3",
+  loading = "lazy",
+  class: className = "",
+} = Astro.props;
+
+const placeholder = site.usePlaceholders === true;
+---
+
+{
+  placeholder ? (
+    <div class={`ph ${className}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={`Заглушка: ${alt}`}>
+      <svg class="ph__mark" viewBox="0 0 48 40" aria-hidden="true" focusable="false">
+        <rect x="1.5" y="1.5" width="45" height="37" rx="2" fill="none" stroke="currentColor" stroke-width="2" />
+        <circle cx="15" cy="13" r="4" fill="currentColor" opacity="0.5" />
+        <path d="M4 33 L18 19 L28 28 L35 22 L44 33 Z" fill="currentColor" opacity="0.5" />
+      </svg>
+      <p class="ph__title">Тут буде ваше фото</p>
+      {hint && <p class="ph__hint">{hint}</p>}
+    </div>
+  ) : (
+    <img class={className} src={src} alt={alt} loading={loading} decoding="async" style={`aspect-ratio:${ratio};object-fit:cover;width:100%`} />
+  )
+}
+
+<style>
+  .ph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    background:
+      repeating-linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent) 5%, var(--surface-2)) 0px,
+        color-mix(in srgb, var(--accent) 5%, var(--surface-2)) 10px,
+        var(--surface-2) 10px,
+        var(--surface-2) 20px
+      );
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius);
+    color: var(--fg-faint);
+  }
+  .ph__mark {
+    width: 40px;
+    height: auto;
+    color: var(--accent);
+    opacity: 0.55;
+    margin-bottom: 4px;
+  }
+  .ph__title {
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--fg-soft);
+  }
+  .ph__hint {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    max-width: 26ch;
+    color: var(--fg-faint);
+  }
+</style>

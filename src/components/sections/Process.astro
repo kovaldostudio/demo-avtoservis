@@ -1,0 +1,52 @@
+---
+import { site } from "../../lib/site";
+---
+
+<section id="process" class="section proc">
+  <div class="shell">
+    <p class="eyebrow">Порядок робіт</p>
+    <h2>{site.processTitle}</h2>
+
+    <ol class="proc__list">
+      {
+        site.process.map((p, i) => (
+          <li class="proc__item">
+            <span class="proc__num tabnum">{i + 1}</span>
+            <div>
+              <h3>{p.step}</h3>
+              <p>{p.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .proc h2 { margin-bottom: 44px; }
+  .proc__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 34px 30px;
+    counter-reset: step;
+  }
+  .proc__item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 2px solid var(--accent);
+  }
+  .proc__num {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .proc__item h3 { margin-bottom: 6px; font-size: 1.08rem; }
+  .proc__item p { color: var(--fg-soft); font-size: 0.94rem; }
+</style>

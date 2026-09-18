@@ -1,0 +1,219 @@
+@import "tailwindcss";
+
+/* ============================================================
+   ТЕМИ
+   Кожна тема — окремий візуальний світ: свої шрифти, ритм,
+   радіуси й насиченість. Мета — щоб два сайти, зібрані з цього
+   шаблону, не читалися як один шаблон.
+   Перемикається полем `theme` у site.config.yaml.
+   ============================================================ */
+
+:root {
+  --maxw: 1180px;
+  --gutter: 20px;
+  --section-y: 88px;
+  --ring: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* ——— oak: тепле дерево, спокійна майстерня ——— */
+[data-theme="oak"] {
+  --bg: #F4F1EB;
+  --surface: #FFFFFF;
+  --surface-2: #E9E4DA;
+  --fg: #2B241C;
+  --fg-soft: #665B4D;
+  --fg-faint: #6E6455;
+  --line: #DCD5C8;
+  --line-strong: #C3B9A6;
+  --accent: #7A4A21;
+  --accent-fg: #FFFFFF;
+  --accent-soft: #EFE3D5;
+  --font-display: "Literata", Georgia, serif;
+  --font-body: "Manrope", system-ui, sans-serif;
+  --radius: 2px;
+  --radius-lg: 3px;
+  --display-weight: 600;
+  --display-tracking: -0.015em;
+  --label-tracking: 0.12em;
+}
+
+/* ——— graphite: темний індустріальний цех ——— */
+[data-theme="graphite"] {
+  --bg: #161819;
+  --surface: #1E2123;
+  --surface-2: #262A2C;
+  --fg: #E8EAE9;
+  --fg-soft: #A3AAA8;
+  --fg-faint: #7C8483;
+  --line: #2E3335;
+  --line-strong: #414749;
+  --accent: #D2601A;
+  --accent-fg: #14161700;
+  --accent-soft: #2A2119;
+  --font-display: "Oswald", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --display-weight: 500;
+  --display-tracking: 0.01em;
+  --label-tracking: 0.18em;
+}
+[data-theme="graphite"] { --accent-fg: #141617; }
+
+/* ——— linen: світлий мінімалізм, багато повітря ——— */
+[data-theme="linen"] {
+  --bg: #FBFAF7;
+  --surface: #FFFFFF;
+  --surface-2: #F2F0EA;
+  --fg: #1B1C18;
+  --fg-soft: #5A5C54;
+  --fg-faint: #6A6C63;
+  --line: #E4E2DA;
+  --line-strong: #CBC9BF;
+  --accent: #4A5D3F;
+  --accent-fg: #FFFFFF;
+  --accent-soft: #E7EBE2;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Commissioner", system-ui, sans-serif;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --display-weight: 600;
+  --display-tracking: 0em;
+  --label-tracking: 0.2em;
+  --section-y: 108px;
+}
+
+/* ——— ink: контрастна, сучасна, для сміливих брендів ——— */
+[data-theme="ink"] {
+  --bg: #FFFFFF;
+  --surface: #F6F6F4;
+  --surface-2: #ECECE8;
+  --fg: #0B0B0A;
+  --fg-soft: #4C4C48;
+  --fg-faint: #676762;
+  --line: #E0E0DB;
+  --line-strong: #B9B9B2;
+  --accent: #14449E;
+  --accent-fg: #FFFFFF;
+  --accent-soft: #E6ECF7;
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-body: "Manrope", system-ui, sans-serif;
+  --radius: 10px;
+  --radius-lg: 18px;
+  --display-weight: 600;
+  --display-tracking: -0.03em;
+  --label-tracking: 0.08em;
+}
+
+/* ============================================================
+   БАЗА
+   ============================================================ */
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, video { max-width: 100%; height: auto; display: block; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  line-height: 1.12;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(2.1rem, 5.4vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 3.6vw, 2.4rem); }
+h3 { font-size: clamp(1.15rem, 2vw, 1.35rem); }
+
+p { margin: 0; }
+
+a { color: inherit; }
+
+:where(a, button, input, textarea, select):focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: var(--radius);
+}
+
+/* ——— каркас ——— */
+.shell {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section { padding-block: var(--section-y); }
+.section--tight { padding-block: calc(var(--section-y) * 0.62); }
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.lede {
+  font-size: 1.08rem;
+  color: var(--fg-soft);
+  max-width: 62ch;
+}
+
+/* ——— кнопки ——— */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 28px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.btn--primary { background: var(--accent); color: var(--accent-fg); }
+.btn--primary:hover { transform: translateY(-1px); }
+.btn--ghost { background: transparent; color: var(--fg); border-color: var(--line-strong); }
+.btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ——— дрібниці ——— */
+.rule { height: 1px; background: var(--line); border: 0; margin: 0; }
+
+.tabnum { font-variant-numeric: tabular-nums; }
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: 10px 18px;
+  z-index: 100;
+}
+.skip:focus { left: 8px; top: 8px; }

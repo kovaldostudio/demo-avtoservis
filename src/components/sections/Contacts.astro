@@ -1,0 +1,224 @@
+---
+import { site } from "../../lib/site";
+
+const { contacts, form, finalCta } = site;
+const hasTurnstile = Boolean(form.turnstileSiteKey);
+---
+
+<section id="contacts" class="section cnt">
+  <div class="shell cnt__in">
+    <div class="cnt__copy">
+      <p class="eyebrow">Зв'язок</p>
+      <h2>{finalCta.title}</h2>
+      <p class="lede cnt__text">{finalCta.text}</p>
+
+      <dl class="cnt__list">
+        <div>
+          <dt>Телефон</dt>
+          <dd><a class="tabnum" href={`tel:${contacts.phoneHref}`}>{contacts.phone}</a></dd>
+        </div>
+        <div>
+          <dt>Пошта</dt>
+          <dd><a href={`mailto:${contacts.email}`}>{contacts.email}</a></dd>
+        </div>
+        <div>
+          <dt>Майстерня</dt>
+          <dd>{contacts.address}</dd>
+        </div>
+        <div>
+          <dt>Графік</dt>
+          <dd>{contacts.hours}</dd>
+        </div>
+      </dl>
+
+      <div class="cnt__soc">
+        {contacts.telegram && <a class="btn btn--ghost" href={contacts.telegram}>Telegram</a>}
+        {contacts.instagram && <a class="btn btn--ghost" href={contacts.instagram}>Instagram</a>}
+      </div>
+    </div>
+
+    <form class="cnt__form" id="lead-form" novalidate>
+      <div class="field">
+        <label for="lf-name">Як до вас звертатися</label>
+        <input id="lf-name" name="name" type="text" required autocomplete="name" placeholder="Імʼя" />
+      </div>
+
+      <div class="field">
+        <label for="lf-phone">Телефон</label>
+        <input id="lf-phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="+380" />
+      </div>
+
+      <div class="field">
+        <label for="lf-msg">Що потрібно</label>
+        <textarea id="lf-msg" name="message" rows="4" placeholder="Коротко: приміщення, строк, орієнтовний бюджет"></textarea>
+      </div>
+
+      {/* Пастка для ботів: людина цього поля не бачить і не заповнює. */}
+      <div class="hp" aria-hidden="true">
+        <label for="lf-company">Не заповнюйте це поле</label>
+        <input id="lf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      {hasTurnstile && <div class="cf-turnstile" data-sitekey={form.turnstileSiteKey} data-theme="auto"></div>}
+
+      <button class="btn btn--primary cnt__submit" type="submit" id="lf-submit">{form.cta}</button>
+
+      <p class="cnt__legal">
+        Надсилаючи форму, ви погоджуєтесь, що ми звʼяжемося з вами щодо замовлення.
+      </p>
+
+      <p class="cnt__status" id="lf-status" role="status" aria-live="polite" hidden></p>
+    </form>
+  </div>
+</section>
+
+{hasTurnstile && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+
+<script define:vars={{ endpoint: form.endpoint, successText: form.successText }}>
+  const formEl = document.getElementById("lead-form");
+  const statusEl = document.getElementById("lf-status");
+  const submitEl = document.getElementById("lf-submit");
+
+  function say(text, kind) {
+    statusEl.hidden = false;
+    statusEl.textContent = text;
+    statusEl.dataset.kind = kind;
+  }
+
+  formEl.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = Object.fromEntries(new FormData(formEl).entries());
+
+    if (!data.name || !String(data.name).trim()) {
+      say("Вкажіть, будь ласка, імʼя.", "error");
+      document.getElementById("lf-name").focus();
+      return;
+    }
+    const digits = String(data.phone || "").replace(/\D/g, "");
+    if (digits.length < 10) {
+      say("Перевірте номер телефону — схоже, бракує цифр.", "error");
+      document.getElementById("lf-phone").focus();
+      return;
+    }
+
+    submitEl.disabled = true;
+    const original = submitEl.textContent;
+    submitEl.textContent = "Надсилаємо…";
+    say("", "");
+    statusEl.hidden = true;
+
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, page: location.href }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      formEl.reset();
+      say(successText, "ok");
+    } catch (err) {
+      say("Не вдалося надіслати. Зателефонуйте нам або напишіть у Telegram — приймемо заявку там.", "error");
+    } finally {
+      submitEl.disabled = false;
+      submitEl.textContent = original;
+    }
+  });
+</script>
+
+<style>
+  .cnt { background: var(--surface); border-top: 1px solid var(--line); }
+  .cnt__in {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .cnt__text { margin-top: 16px; }
+
+  .cnt__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 22px 28px;
+    margin: 36px 0 0;
+  }
+  .cnt__list dt {
+    font-size: 0.72rem;
+    letter-spacing: var(--label-tracking);
+    text-transform: uppercase;
+    color: var(--fg-faint);
+    margin-bottom: 4px;
+  }
+  .cnt__list dd { margin: 0; font-size: 0.97rem; }
+  .cnt__list a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
+  .cnt__list a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .cnt__soc { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .cnt__soc .btn { padding: 11px 22px; font-size: 0.92rem; }
+
+  .cnt__form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+  }
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .field label {
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--fg-soft);
+    font-weight: 600;
+  }
+  .field input,
+  .field textarea {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--fg);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 13px 15px;
+    width: 100%;
+  }
+  .field textarea { resize: vertical; min-height: 96px; }
+  .field input::placeholder,
+  .field textarea::placeholder { color: var(--fg-faint); }
+
+  .hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .cnt__submit { margin-top: 4px; }
+  .cnt__legal { font-size: 0.78rem; color: var(--fg-faint); }
+
+  .cnt__status {
+    font-size: 0.92rem;
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line-strong);
+  }
+  .cnt__status[data-kind="ok"] {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .cnt__status[data-kind="error"] {
+    color: var(--fg);
+    border-color: var(--line-strong);
+    background: var(--surface-2);
+  }
+
+  @media (max-width: 900px) {
+    .cnt__in { grid-template-columns: 1fr; gap: 40px; }
+    .cnt__form { padding: 24px 20px; }
+  }
+</style>

@@ -1,0 +1,14 @@
+name = "lead-form"
+main = "index.js"
+compatibility_date = "2026-09-01"
+
+# Домен сайту клієнта. Поки сайт живе на *.pages.dev — ставити цю адресу.
+# Після підключення власного домену — замінити.
+# "*" лишати не можна: будь-хто зможе слати заявки у чужий Telegram.
+[vars]
+ALLOWED_ORIGIN = "https://example.pages.dev"
+
+# Секрети НЕ тут. Ставити командами:
+#   npx wrangler secret put TELEGRAM_TOKEN
+#   npx wrangler secret put TELEGRAM_CHAT_ID
+#   npx wrangler secret put TURNSTILE_SECRET

@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/sections/Header.astro";
+import Hero from "../components/sections/Hero.astro";
+import Advantages from "../components/sections/Advantages.astro";
+import Catalog from "../components/sections/Catalog.astro";
+import Process from "../components/sections/Process.astro";
+import Testimonials from "../components/sections/Testimonials.astro";
+import Faq from "../components/sections/Faq.astro";
+import Contacts from "../components/sections/Contacts.astro";
+import Footer from "../components/sections/Footer.astro";
+import { auditConfig } from "../lib/site";
+
+// Попередження в консоль збірки: ловить незамінені поля з прикладу.
+const warnings = auditConfig();
+if (warnings.length) {
+  console.warn("\n[конфіг] перевірте перед показом клієнту:");
+  for (const w of warnings) console.warn("  • " + w);
+  console.warn("");
+}
+---
+
+<BaseLayout>
+  <Header />
+  <main id="main">
+    <Hero />
+    <Advantages />
+    <Catalog />
+    <Process />
+    <Testimonials />
+    <Faq />
+    <Contacts />
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+import { site } from "../lib/site";
+
+const FONTS: Record<string, string> = {
+  oak: "family=Literata:opsz,wght@7..72,400;7..72,600&family=Manrope:wght@400;600;700",
+  graphite: "family=Oswald:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600",
+  linen: "family=Playfair+Display:wght@500;600&family=Commissioner:wght@400;500;600",
+  ink: "family=Unbounded:wght@500;600&family=Manrope:wght@400;600;700",
+};
+
+const fontHref = `https://fonts.googleapis.com/css2?${FONTS[site.theme] ?? FONTS.oak}&display=swap`;
+const canonical = `https://${site.seo.domain}/`;
+
+// Розмітка для Google: без неї бізнес не потрапляє в блок локальних результатів.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: site.brand.legalName,
+  alternateName: site.brand.name,
+  description: site.brand.about.trim(),
+  url: canonical,
+  telephone: site.contacts.phoneHref,
+  email: site.contacts.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: site.contacts.address,
+    addressLocality: site.brand.city,
+    addressCountry: "UA",
+  },
+  foundingDate: String(site.brand.since),
+  sameAs: [site.contacts.instagram, site.contacts.telegram].filter(Boolean),
+  makesOffer: site.catalog.map((item) => ({
+    "@type": "Offer",
+    itemOffered: { "@type": "Service", name: item.name, description: item.desc },
+  })),
+};
+---
+
+<!doctype html>
+<html lang="uk" data-theme={site.theme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.seo.title}</title>
+    <meta name="description" content={site.seo.description.trim()} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={site.seo.locale} />
+    <meta property="og:site_name" content={site.brand.name} />
+    <meta property="og:title" content={site.seo.title} />
+    <meta property="og:description" content={site.seo.description.trim()} />
+    <meta property="og:image" content={site.seo.ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontHref} />
+
+    <set:html value={`<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Перейти до вмісту</a>
+    <slot />
+  </body>
+</html>

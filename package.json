@@ -1,0 +1,38 @@
+{
+  "name": "starter",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview --port 4321",
+    "astro": "astro",
+    "qa": "npm run build && astro preview --port 4321 && wait-on http://localhost:4321 && playwright test",
+    "qa:checks": "playwright test qa/checks.spec.ts",
+    "qa:lh": "playwright test qa/lighthouse.spec.ts",
+    "qa:stop": "astro preview stop",
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "worker:deploy": "wrangler deploy --config worker/wrangler.toml"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.3",
+    "js-yaml": "^5.4.2",
+    "tailwindcss": "^4.3.3"
+  },
+  "allowScripts": {
+    "esbuild": true
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/js-yaml": "^4.0.9",
+    "axe-playwright": "^2.2.2",
+    "concurrently": "^10.0.5",
+    "lighthouse": "^13.4.1",
+    "playwright-lighthouse": "^4.0.0",
+    "wait-on": "^9.1.0"
+  }
+}

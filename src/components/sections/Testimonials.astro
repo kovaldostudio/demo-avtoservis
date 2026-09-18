@@ -1,0 +1,59 @@
+---
+import { site } from "../../lib/site";
+const items = site.testimonials ?? [];
+---
+
+{
+  items.length > 0 && (
+    <section class="section--tight tst">
+      <div class="shell">
+        <p class="eyebrow">Відгуки</p>
+        <h2>{site.testimonialsTitle}</h2>
+
+        <div class="tst__grid">
+          {items.map((t) => (
+            <figure class="tst__item">
+              <blockquote>{t.text}</blockquote>
+              <figcaption>
+                <span class="tst__author">{t.author}</span>
+                <span class="tst__detail">{t.detail}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .tst { background: var(--surface); border-block: 1px solid var(--line); }
+  .tst h2 { margin-bottom: 40px; }
+  .tst__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+  }
+  .tst__item {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0;
+    padding-left: 20px;
+    border-left: 2px solid var(--accent);
+  }
+  .tst__item blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.45;
+  }
+  .tst__item figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: auto;
+  }
+  .tst__author { font-weight: 600; font-size: 0.92rem; }
+  .tst__detail { font-size: 0.82rem; color: var(--fg-faint); }
+</style>

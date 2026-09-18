@@ -1,0 +1,107 @@
+---
+import { site } from "../../lib/site";
+import Figure from "../Figure.astro";
+
+const isList = site.catalogVariant === "list";
+---
+
+<section id="catalog" class="section cat">
+  <div class="shell">
+    <header class="cat__head">
+      <div>
+        <p class="eyebrow">Каталог</p>
+        <h2>{site.catalogTitle}</h2>
+      </div>
+      <p class="cat__note">Ціни орієнтовні. Точну суму називаємо після заміру.</p>
+    </header>
+
+    <div class={isList ? "cat__list" : "cat__grid"}>
+      {
+        site.catalog.map((item) => (
+          <article class={isList ? "card card--row" : "card"}>
+            <Figure
+              src={item.image}
+              alt={item.imageAlt}
+              hint={item.imageAlt}
+              ratio={isList ? "4 / 3" : "3 / 2"}
+              class="card__img"
+            />
+            <div class="card__body">
+              <h3>{item.name}</h3>
+              <p class="card__desc">{item.desc}</p>
+              <div class="card__foot">
+                <span class="card__price tabnum">{item.price}</span>
+                <a class="card__link" href="#contacts">{site.form.cta} →</a>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .cat__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 40px;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  .cat__note { font-size: 0.88rem; color: var(--fg-faint); max-width: 34ch; }
+
+  .cat__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(264px, 1fr));
+    gap: 28px;
+  }
+  .cat__list { display: flex; flex-direction: column; gap: 20px; }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .card--row { flex-direction: row; align-items: stretch; }
+  .card--row :global(.card__img) { width: 38%; flex: none; }
+  .card--row .card__body { padding: 28px 32px; }
+
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px;
+    flex: 1;
+  }
+  .card__desc { color: var(--fg-soft); font-size: 0.94rem; }
+  .card__foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .card__price { font-weight: 700; font-size: 1rem; }
+  .card__link {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .card__link:hover { text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    .card--row { flex-direction: column; }
+    .card--row :global(.card__img) { width: 100%; }
+    .card--row .card__body { padding: 22px; }
+  }
+</style>

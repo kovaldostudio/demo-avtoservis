@@ -1,0 +1,47 @@
+---
+import { site } from "../../lib/site";
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr">
+  <div class="shell ftr__in">
+    <div class="ftr__brand">
+      <span class="ftr__name">{site.brand.name}</span>
+      <span class="ftr__about">{site.brand.about.trim()}</span>
+    </div>
+
+    <div class="ftr__meta">
+      <a class="tabnum" href={`tel:${site.contacts.phoneHref}`}>{site.contacts.phone}</a>
+      <span>{site.contacts.address}</span>
+      <span class="tabnum">© {year} {site.brand.legalName}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr { border-top: 1px solid var(--line); padding-block: 44px; }
+  .ftr__in {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .ftr__brand { display: flex; flex-direction: column; gap: 8px; }
+  .ftr__name {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: 1.2rem;
+  }
+  .ftr__about { font-size: 0.9rem; color: var(--fg-soft); max-width: 46ch; }
+  .ftr__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.88rem;
+    color: var(--fg-soft);
+  }
+  .ftr__meta a { color: var(--fg); text-decoration: none; font-weight: 600; }
+  @media (max-width: 720px) {
+    .ftr__in { grid-template-columns: 1fr; }
+  }
+</style>

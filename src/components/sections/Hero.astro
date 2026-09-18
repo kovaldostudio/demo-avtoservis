@@ -1,0 +1,154 @@
+---
+import { site } from "../../lib/site";
+import Figure from "../Figure.astro";
+
+const v = site.heroVariant;
+const { headline, sub, image, imageAlt, points } = site.hero;
+---
+
+<section id="top" class={`hero hero--${v}`}>
+  <div class="shell">
+    {
+      v === "split" && (
+        <div class="hero__split">
+          <div class="hero__copy">
+            <p class="eyebrow">{site.brand.city} · від {site.brand.since} року</p>
+            <h1>{headline}</h1>
+            <p class="lede hero__sub">{sub}</p>
+            <div class="hero__acts">
+              <a class="btn btn--primary" href="#contacts">{site.form.cta}</a>
+              <a class="btn btn--ghost" href="#catalog">{site.catalogTitle}</a>
+            </div>
+            <ul class="hero__points">
+              {points.map((p) => <li>{p}</li>)}
+            </ul>
+          </div>
+          <div class="hero__media">
+            <Figure src={image} alt={imageAlt} hint={imageAlt} ratio="4 / 5" loading="eager" />
+          </div>
+        </div>
+      )
+    }
+
+    {
+      v === "editorial" && (
+        <div class="hero__editorial">
+          <p class="eyebrow">{site.brand.city} · від {site.brand.since} року</p>
+          <h1 class="hero__big">{headline}</h1>
+          <div class="hero__row">
+            <p class="lede">{sub}</p>
+            <div class="hero__acts">
+              <a class="btn btn--primary" href="#contacts">{site.form.cta}</a>
+              <a class="btn btn--ghost" href="#catalog">{site.catalogTitle}</a>
+            </div>
+          </div>
+          <Figure src={image} alt={imageAlt} hint={imageAlt} ratio="21 / 9" loading="eager" class="hero__band" />
+          <ul class="hero__points hero__points--row">
+            {points.map((p) => <li>{p}</li>)}
+          </ul>
+        </div>
+      )
+    }
+
+    {
+      v === "fullbleed" && (
+        <div class="hero__full">
+          <Figure src={image} alt={imageAlt} hint={imageAlt} ratio="16 / 10" loading="eager" class="hero__bg" />
+          <div class="hero__panel">
+            <p class="eyebrow">{site.brand.city} · від {site.brand.since} року</p>
+            <h1>{headline}</h1>
+            <p class="lede hero__sub">{sub}</p>
+            <div class="hero__acts">
+              <a class="btn btn--primary" href="#contacts">{site.form.cta}</a>
+            </div>
+            <ul class="hero__points hero__points--row">
+              {points.map((p) => <li>{p}</li>)}
+            </ul>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: 56px var(--section-y); }
+
+  .hero__sub { margin-top: 18px; }
+
+  .hero__acts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .hero__points {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+    margin: 32px 0 0;
+    padding: 0;
+  }
+  .hero__points--row { flex-direction: row; flex-wrap: wrap; gap: 10px 28px; }
+  .hero__points li {
+    position: relative;
+    padding-left: 24px;
+    font-size: 0.95rem;
+    color: var(--fg-soft);
+  }
+  .hero__points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 12px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  /* ——— split ——— */
+  .hero__split {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  /* ——— editorial ——— */
+  .hero__big { font-size: clamp(2.4rem, 7vw, 5rem); max-width: 16ch; }
+  .hero__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: end;
+    margin-top: 28px;
+  }
+  .hero__row .hero__acts { margin-top: 0; }
+  .hero__band { margin-top: 44px; }
+
+  /* ——— fullbleed ——— */
+  .hero__full { position: relative; }
+  .hero__panel {
+    position: relative;
+    margin: -140px 0 0 0;
+    margin-inline-start: 0;
+    max-width: 700px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+  }
+
+  @media (max-width: 900px) {
+    .hero__split { grid-template-columns: 1fr; gap: 36px; }
+    .hero__media { order: -1; }
+    .hero__row { grid-template-columns: 1fr; align-items: start; }
+    .hero__panel { margin-top: -60px; padding: 28px 22px; }
+  }
+  @media (max-width: 620px) {
+    .hero { padding-block: 32px calc(var(--section-y) * 0.7); }
+    .hero__panel { margin-top: -28px; }
+  }
+</style>
