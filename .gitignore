@@ -27,3 +27,5 @@ qa/shots/
 qa/lighthouse/
 test-results/
 .astro/
+
+CLAUDE.md
